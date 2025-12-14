@@ -1,0 +1,22 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "{0CABAB8D-48E1-1E7B-EBC9-DD902C587BA3}",
+	"Category": "",
+	"Description": "",
+	"Modules": [
+		{
+			"Name": "Crunch",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "ModelingToolsEditorMode",
+			"Enabled": true,
+			"TargetAllowList": [
+				"Editor"
+			]
+		}
+	]
+}
