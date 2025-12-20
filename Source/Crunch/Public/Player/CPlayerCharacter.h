@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "InputActionValue.h"
 #include "Crunch/Public/Character/CCharacter.h"
 #include "CPlayerCharacter.generated.h"
 
@@ -33,5 +34,10 @@ private:
 	UInputAction* JumpInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* LookInputAction;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputMappingContext* GameplayInputMappingContext;
+	
+	void HandleLookInput(const FInputActionValue& InputActionValue);
 };
