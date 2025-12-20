@@ -6,23 +6,22 @@
 #include "Crunch/Public/Character/CCharacter.h"
 #include "CPlayerCharacter.generated.h"
 
+class UCameraComponent;
+class USpringArmComponent;
+/**
+ * 
+ */
 UCLASS()
 class CRUNCH_API ACPlayerCharacter : public ACCharacter
 {
 	GENERATED_BODY()
-
 public:
-	// Sets default values for this character's properties
 	ACPlayerCharacter();
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category = "View")
+	USpringArmComponent* CameraBoom;
+	
+	UPROPERTY(VisibleDefaultsOnly, Category = "View")
+	UCameraComponent* ViewCam;
 };

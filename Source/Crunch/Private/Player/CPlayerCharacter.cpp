@@ -3,30 +3,14 @@
 
 #include "Crunch/Public/Player/CPlayerCharacter.h"
 
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
-// Sets default values
 ACPlayerCharacter::ACPlayerCharacter()
 {
-	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-}
-
-// Called when the game starts or when spawned
-void ACPlayerCharacter::BeginPlay()
-{
-	Super::BeginPlay();
+	CameraBoom = CreateDefaultSubobject<USpringArmComponent>("Camera Boom");
+	CameraBoom->SetupAttachment(GetRootComponent());
 	
+	ViewCam = CreateDefaultSubobject<UCameraComponent>("View Cam");
+	ViewCam->SetupAttachment(CameraBoom, USpringArmComponent::SocketName);
 }
-
-// Called every frame
-void ACPlayerCharacter::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-}
-
-// Called to bind functionality to input
-void ACPlayerCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-}
-
