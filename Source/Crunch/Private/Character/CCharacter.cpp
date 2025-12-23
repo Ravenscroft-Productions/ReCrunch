@@ -33,6 +33,21 @@ void ACCharacter::ClientSideInit()
 	CAbilitySystemComponent->InitAbilityActorInfo(this, this);
 }
 
+bool ACCharacter::IsLocallyControlledByPlayer() const
+{
+	return GetController() && GetController()->IsLocalPlayerController();
+}
+
+void ACCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	if (NewController && !NewController->IsPlayerController())
+	{
+		ServerSideInit();
+	}
+}
+
 // Called when the game starts or when spawned
 void ACCharacter::BeginPlay()
 {
@@ -62,10 +77,17 @@ void ACCharacter::ConfigureOverheadStatusWidget()
 {
 	if (!OverheadWidgetComponent) return;
 	
+	if (IsLocallyControlledByPlayer())
+	{
+		OverheadWidgetComponent->SetHiddenInGame(true);
+		return;
+	}
+	
 	UOverheadStatsGauge* OverheadStatsGauge = Cast<UOverheadStatsGauge>(OverheadWidgetComponent->GetUserWidgetObject());
 	if (OverheadStatsGauge)
 	{
 		OverheadStatsGauge->ConfigureWithASC(GetAbilitySystemComponent());
+		OverheadWidgetComponent->SetHiddenInGame(false);
 	}
 }
 

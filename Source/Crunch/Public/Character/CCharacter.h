@@ -21,6 +21,9 @@ public:
 	ACCharacter();
 	void ServerSideInit();
 	void ClientSideInit();
+	bool IsLocallyControlledByPlayer() const;
+	// Only Called on Server
+	virtual void PossessedBy(AController* NewController) override;
 
 protected:
 	// Called when the game starts or when spawned
