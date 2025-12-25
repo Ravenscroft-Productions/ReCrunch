@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "Crunch/Public/Character/CCharacter.h"
+#include "GAS/CGameplayAbilityTypes.h"
 #include "CPlayerCharacter.generated.h"
 
 class UInputMappingContext;
@@ -29,7 +30,15 @@ private:
 	
 	UPROPERTY(VisibleDefaultsOnly, Category = "View")
 	UCameraComponent* ViewCam;
+		
+	FVector GetLookRightDir() const;
+	FVector GetLookFwdDir() const;
+	FVector GetMoveFwdDir() const;
 	
+	/***********************************************************************/
+	/*                               Input                                 */
+	/***********************************************************************/
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* JumpInputAction;
 	
@@ -40,12 +49,12 @@ private:
 	UInputAction* MoveInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TMap<ECAbilityInputID, UInputAction*> GameplayAbilityInputActions;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputMappingContext* GameplayInputMappingContext;
 	
 	void HandleLookInput(const FInputActionValue& InputActionValue);
 	void HandleMoveInput(const FInputActionValue& InputActionValue);
-	
-	FVector GetLookRightDir() const;
-	FVector GetLookFwdDir() const;
-	FVector GetMoveFwdDir() const;
+	void HandleAbilityInput(const FInputActionValue& InputActionValue, ECAbilityInputID InputID);
 };
