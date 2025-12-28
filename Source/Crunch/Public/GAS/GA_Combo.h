@@ -24,6 +24,14 @@ private:
 	void SetupWaitComboInputPress();
 	void TryCommitCombo();
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Effect")
+	TSubclassOf<UGameplayEffect> DefaultDamageEffect;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Effect")
+	TMap<FName, TSubclassOf<UGameplayEffect>> DamageEffectMap;
+	
+	TSubclassOf<UGameplayEffect> GetDamageEffectForCurrentCombo() const;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* ComboMontage;
 	
