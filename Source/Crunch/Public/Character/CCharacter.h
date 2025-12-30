@@ -7,6 +7,7 @@
 #include "AbilitySystemInterface.h"
 #include "CCharacter.generated.h"
 
+struct FGameplayTag;
 class UWidgetComponent;
 class UCAttributeSet;
 class UCAbilitySystemComponent;
@@ -43,6 +44,9 @@ public:
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
 private:
+	void BindGASChangeDelegates();
+	void DeadTagUpdated(const FGameplayTag Tag, int32 NewCount);
+	
 	UPROPERTY(VisibleDefaultsOnly, Category = "Gameplay Ability")
 	UCAbilitySystemComponent* CAbilitySystemComponent;
 	
@@ -67,4 +71,10 @@ private:
 	FTimerHandle OverheadStatGaugeVisibilityUpdateTimerHandle;
 	
 	void UpdateOverheadGaugeVisibility();
+	
+	/***********************************************************************/
+	/*                          Death And Respawn                          */
+	/***********************************************************************/
+	void StartDeathSequence();
+	void Respawn();
 };
