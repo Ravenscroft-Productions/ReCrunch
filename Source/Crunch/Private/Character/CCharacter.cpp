@@ -132,6 +132,7 @@ void ACCharacter::UpdateOverheadGaugeVisibility()
 
 void ACCharacter::SetStatusGaugeEnabled(bool bIsEnabled)
 {
+	GetWorldTimerManager().ClearTimer(OverheadStatGaugeVisibilityUpdateTimerHandle);
 	if (bIsEnabled)
 	{
 		ConfigureOverheadStatusWidget();
@@ -161,8 +162,16 @@ void ACCharacter::StartDeathSequence()
 
 void ACCharacter::Respawn()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Respawn"));
 	OnRespawn();
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
+	GetMesh()->GetAnimInstance()->StopAllMontages(0.0f);
+	SetStatusGaugeEnabled(true);
+	
+	if (CAbilitySystemComponent)
+	{
+		CAbilitySystemComponent->ApplyFullStatEffect();
+	}
 }
 
 void ACCharacter::OnDead()
