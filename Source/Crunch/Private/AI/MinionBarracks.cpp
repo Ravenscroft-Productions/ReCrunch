@@ -16,7 +16,10 @@ void AMinionBarracks::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	SpawnNewMinions(5);
+	if (HasAuthority())
+	{
+		GetWorldTimerManager().SetTimer(SpawnIntervalTimerHandle, this, &AMinionBarracks::SpawnNewGroup, GroupSpawnInterval, true);
+	}
 }
 
 void AMinionBarracks::Tick(float DeltaTime)
@@ -35,6 +38,29 @@ const APlayerStart* AMinionBarracks::GetNextSpawnSpot()
 	return SpawnSpots[NextSpawnSpotIndex];
 }
 
+void AMinionBarracks::SpawnNewGroup()
+{
+	int i = MinionsPerGroup;
+	
+	while (i > 0)
+	{
+		FTransform SpawnTransform = GetActorTransform();
+		if (const APlayerStart* NextSpawnSpot = GetNextSpawnSpot())
+		{
+			SpawnTransform = NextSpawnSpot->GetActorTransform();
+		}
+		
+		AMinion* NextAvailableMinion = GetNextAvailableMinion();
+		if (!NextAvailableMinion) break;
+		
+		NextAvailableMinion->SetActorTransform(SpawnTransform);
+		NextAvailableMinion->Activate();
+		--i;
+	}
+	
+	SpawnNewMinions(i);
+}
+
 void AMinionBarracks::SpawnNewMinions(int Amt)
 {
 	for (int i =0; i < Amt; i++)
@@ -50,5 +76,15 @@ void AMinionBarracks::SpawnNewMinions(int Amt)
 		NewMinion->FinishSpawning(SpawnTransform);
 		MinionPool.Add(NewMinion);
 	}
+}
+
+AMinion* AMinionBarracks::GetNextAvailableMinion() const
+{
+	for (AMinion* Minion : MinionPool)
+	{
+		if (!Minion->IsActive()) return Minion;
+	}
+	
+	return nullptr;
 }
 
