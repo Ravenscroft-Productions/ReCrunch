@@ -35,6 +35,9 @@ private:
 	TArray<AMinion*> MinionPool;
 	
 	UPROPERTY(EditAnywhere, Category = "Spawn")
+	AActor* Goal;
+	
+	UPROPERTY(EditAnywhere, Category = "Spawn")
 	TSubclassOf<AMinion> MinionClass;
 	
 	UPROPERTY(EditAnywhere, Category = "Spawn")
