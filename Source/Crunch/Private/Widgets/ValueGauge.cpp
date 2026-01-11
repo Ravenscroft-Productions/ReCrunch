@@ -12,6 +12,9 @@ void UValueGauge::NativePreConstruct()
 	Super::NativePreConstruct();
 	
 	ProgressBar->SetFillColorAndOpacity(BarColour);
+	ValueText->SetFont(ValueTextFont);
+	ValueText->SetVisibility(bValueTextVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
+	ProgressBar->SetVisibility(bProgressBarVisible ? ESlateVisibility::Visible : ESlateVisibility::Hidden);
 }
 
 void UValueGauge::SetAndBindToGameplayAttribute(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayAttribute& Attribute, const FGameplayAttribute& MaxAttribute)

@@ -33,6 +33,15 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Visual")
 	FLinearColor BarColour;
 	
+	UPROPERTY(EditAnywhere, Category = "Visual")
+	FSlateFontInfo ValueTextFont;
+	
+	UPROPERTY(EditAnywhere, Category = "Visual")
+	bool bValueTextVisible = true;
+	
+	UPROPERTY(EditAnywhere, Category = "Visual")
+	bool bProgressBarVisible = true;
+	
 	UPROPERTY(VisibleAnywhere, meta=(BindWidget))
 	UProgressBar* ProgressBar;
 	
