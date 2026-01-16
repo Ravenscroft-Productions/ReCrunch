@@ -17,4 +17,11 @@ class CRUNCH_API UCGameplayAbility : public UGameplayAbility
 protected:
 	UAnimInstance* GetOwnerAnimInstance() const;
 	TArray<FHitResult> GetHitResultFromSweepLocationTargetData(const FGameplayAbilityTargetDataHandle& TargetDataHandle, float SphereSweepRadius = 30.0f, ETeamAttitude::Type TargetTeam = ETeamAttitude::Hostile, bool bDrawDebug = false, bool bIgnoreSelf = true) const;
+
+	UFUNCTION()
+	FORCEINLINE bool ShouldDrawDebug() const { return bShouldDrawDebug; }
+	
+private:
+	UPROPERTY(EditDefaultsOnly, Category = "Debug")
+	bool bShouldDrawDebug = false;
 };

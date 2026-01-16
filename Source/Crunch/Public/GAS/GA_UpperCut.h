@@ -4,13 +4,13 @@
 
 #include "CoreMinimal.h"
 #include "CGameplayAbility.h"
-#include "UpperCut.generated.h"
+#include "GA_UpperCut.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class CRUNCH_API UUpperCut : public UCGameplayAbility
+class CRUNCH_API UGA_UpperCut : public UCGameplayAbility
 {
 	GENERATED_BODY()
 public:
@@ -19,4 +19,12 @@ public:
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* UpperCutMontage;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetSweepSphereRadius = 80.0f;
+	
+	static FGameplayTag GetUpperCutLaunchTag();
+	
+	UFUNCTION()
+	void StartLaunching(FGameplayEventData EventData);
 };
