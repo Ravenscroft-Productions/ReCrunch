@@ -3,6 +3,9 @@
 
 #include "GAS/CGameplayAbility.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
+#include "GameFramework/Character.h"
+#include "GAS/GAP_Launched.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
@@ -63,4 +66,37 @@ TArray<FHitResult> UCGameplayAbility::GetHitResultFromSweepLocationTargetData(co
 	}
 	
 	return OutResults;
+}
+
+void UCGameplayAbility::PushSelf(const FVector& PushVel)
+{
+	ACharacter* OwningAvatarCharacter = GetOwningAvatarCharacter();
+	if (OwningAvatarCharacter)
+	{
+		OwningAvatarCharacter->LaunchCharacter(PushVel, true, true);
+	}
+}
+
+void UCGameplayAbility::PushTarget(AActor* Target, const FVector& PushVel)
+{
+	if (!Target) return;
+	
+	FGameplayEventData EventData;
+	FGameplayAbilityTargetData_SingleTargetHit* HitData = new FGameplayAbilityTargetData_SingleTargetHit;
+	FHitResult HitResult;
+	HitResult.ImpactNormal = PushVel;
+	HitData->HitResult = HitResult;
+	EventData.TargetData.Add(HitData);
+	
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, UGAP_Launched::GetLaunchedAbilityActivationTag(), EventData);
+}
+
+ACharacter* UCGameplayAbility::GetOwningAvatarCharacter()
+{
+	if (!AvatarCharacter)
+	{
+		AvatarCharacter = Cast<ACharacter>(GetAvatarActorFromActorInfo());
+	}
+	
+	return AvatarCharacter;
 }

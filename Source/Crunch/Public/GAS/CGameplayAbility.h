@@ -21,7 +21,14 @@ protected:
 	UFUNCTION()
 	FORCEINLINE bool ShouldDrawDebug() const { return bShouldDrawDebug; }
 	
+	void PushSelf(const FVector& PushVel);
+	void PushTarget(AActor* Target, const FVector& PushVel);
+	ACharacter* GetOwningAvatarCharacter();
+	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Debug")
 	bool bShouldDrawDebug = false;
+	
+	UPROPERTY()
+	ACharacter* AvatarCharacter;
 };
