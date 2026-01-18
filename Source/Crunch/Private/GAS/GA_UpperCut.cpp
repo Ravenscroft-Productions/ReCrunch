@@ -8,11 +8,13 @@
 
 void UGA_UpperCut::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
+	bHasLaunched = false;
 	if (!K2_CommitAbility())
 	{
 		K2_EndAbility();
 		return;
 	}
+	
 	
 	if (HasAuthorityOrPredictionKey(ActorInfo, &ActivationInfo))
 	{
@@ -23,9 +25,12 @@ void UGA_UpperCut::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 		PlayUpperCutMontageTask->OnInterrupted.AddDynamic(this, &UGA_UpperCut::K2_EndAbility);
 		PlayUpperCutMontageTask->ReadyForActivation();
 		
-		UAbilityTask_WaitGameplayEvent* WaitLaunchEventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, GetUpperCutLaunchTag());
-		WaitLaunchEventTask->EventReceived.AddDynamic(this, &UGA_UpperCut::StartLaunching);
-		WaitLaunchEventTask->ReadyForActivation();
+		if (K2_HasAuthority())
+		{
+			UAbilityTask_WaitGameplayEvent* WaitLaunchEventTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, GetUpperCutLaunchTag());
+			WaitLaunchEventTask->EventReceived.AddDynamic(this, &UGA_UpperCut::StartLaunching);
+			WaitLaunchEventTask->ReadyForActivation();
+		}
 	}
 }
 
@@ -36,13 +41,15 @@ FGameplayTag UGA_UpperCut::GetUpperCutLaunchTag()
 
 void UGA_UpperCut::StartLaunching(FGameplayEventData EventData)
 {
-	if (K2_HasAuthority())
+	if (!K2_HasAuthority() || bHasLaunched) return;
+	
+	bHasLaunched = true;	
+	
+	TArray<FHitResult> TargetHitResults = GetHitResultFromSweepLocationTargetData(EventData.TargetData, TargetSweepSphereRadius, ETeamAttitude::Hostile, ShouldDrawDebug());
+	PushTarget(GetAvatarActorFromActorInfo(), FVector::UpVector * UpperCutLaunchSpeed);
+	for (FHitResult HitResult : TargetHitResults)
 	{
-		TArray<FHitResult> TargetHitResults = GetHitResultFromSweepLocationTargetData(EventData.TargetData, TargetSweepSphereRadius, ETeamAttitude::Hostile, ShouldDrawDebug());
-		PushTarget(GetAvatarActorFromActorInfo(), FVector::UpVector * UpperCutLaunchSpeed);
-		for (FHitResult HitResult : TargetHitResults)
-		{
-			PushTarget(HitResult.GetActor(), FVector::UpVector * UpperCutLaunchSpeed);
-		}
+		PushTarget(HitResult.GetActor(), FVector::UpVector * UpperCutLaunchSpeed);
+		ApplyGameplayEffectToHitResultActor(HitResult, LaunchDamageEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo));
 	}
 }

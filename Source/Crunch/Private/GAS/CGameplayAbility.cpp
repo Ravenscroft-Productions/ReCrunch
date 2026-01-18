@@ -5,8 +5,12 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/Character.h"
-#include "GAS/GAP_Launched.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+FGameplayTag UCGameplayAbility::GetLaunchedAbilityActivationTag()
+{
+	return FGameplayTag::RequestGameplayTag("Ability.Passive.Launch.Activate");
+}
 
 UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
 {
@@ -88,7 +92,7 @@ void UCGameplayAbility::PushTarget(AActor* Target, const FVector& PushVel)
 	HitData->HitResult = HitResult;
 	EventData.TargetData.Add(HitData);
 	
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, UGAP_Launched::GetLaunchedAbilityActivationTag(), EventData);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, GetLaunchedAbilityActivationTag(), EventData);
 }
 
 ACharacter* UCGameplayAbility::GetOwningAvatarCharacter()
@@ -99,4 +103,16 @@ ACharacter* UCGameplayAbility::GetOwningAvatarCharacter()
 	}
 	
 	return AvatarCharacter;
+}
+
+void UCGameplayAbility::ApplyGameplayEffectToHitResultActor(const FHitResult& HitResult, TSubclassOf<UGameplayEffect> GameplayEffect, int Level)
+{
+	FGameplayEffectSpecHandle EffectSpecHandle = MakeOutgoingGameplayEffectSpec(GameplayEffect, Level);
+		
+	FGameplayEffectContextHandle EffectContext = MakeEffectContext(GetCurrentAbilitySpecHandle(), GetCurrentActorInfo());
+	EffectContext.AddHitResult(HitResult);
+		
+	EffectSpecHandle.Data->SetContext(EffectContext);
+		
+	ApplyGameplayEffectSpecToTarget(GetCurrentAbilitySpecHandle(), CurrentActorInfo, CurrentActivationInfo, EffectSpecHandle, UAbilitySystemBlueprintLibrary::AbilityTargetDataFromActor(HitResult.GetActor()));
 }

@@ -17,6 +17,9 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Launch")
+	TSubclassOf<UGameplayEffect> LaunchDamageEffect;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Animation")
 	UAnimMontage* UpperCutMontage;
 	
@@ -30,4 +33,7 @@ private:
 	
 	UFUNCTION()
 	void StartLaunching(FGameplayEventData EventData);
+	
+	// Added to fix double launch
+	bool bHasLaunched = false;
 };
