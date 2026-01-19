@@ -3,6 +3,8 @@
 
 #include "GAS/GAP_Launched.h"
 
+#include "GAS/CAbilitySystemStatics.h"
+
 UGAP_Launched::UGAP_Launched()
 {
 	NetExecutionPolicy = EGameplayAbilityNetExecutionPolicy::ServerOnly;
@@ -10,6 +12,7 @@ UGAP_Launched::UGAP_Launched()
 	TriggerData.TriggerSource = EGameplayAbilityTriggerSource::GameplayEvent;
 	TriggerData.TriggerTag = GetLaunchedAbilityActivationTag();
 	
+	ActivationBlockedTags.RemoveTag(UCAbilitySystemStatics::GetStunStatusTag());
 	AbilityTriggers.Add(TriggerData);
 }
 

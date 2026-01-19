@@ -99,6 +99,7 @@ void ACCharacter::BindGASChangeDelegates()
 	if (CAbilitySystemComponent)
 	{
 		CAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetDeadStatusTag()).AddUObject(this, &ACCharacter::DeadTagUpdated);
+		CAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetStunStatusTag()).AddUObject(this, &ACCharacter::StunTagUpdated);
 	}
 }
 
@@ -111,6 +112,22 @@ void ACCharacter::DeadTagUpdated(const FGameplayTag Tag, int32 NewCount)
 	else
 	{
 		Respawn();
+	}
+}
+
+void ACCharacter::StunTagUpdated(const FGameplayTag Tag, int32 NewCount)
+{
+	if (IsDead()) return;
+	
+	if (NewCount != 0)
+	{
+		OnStun();
+		PlayAnimMontage(StunMontage);
+	}
+	else
+	{
+		OnRecoverFromStun();
+		StopAnimMontage(StunMontage);
 	}
 }
 
@@ -155,6 +172,14 @@ void ACCharacter::SetStatusGaugeEnabled(bool bIsEnabled)
 	{
 		OverheadWidgetComponent->SetHiddenInGame(true);
 	}
+}
+
+void ACCharacter::OnStun()
+{
+}
+
+void ACCharacter::OnRecoverFromStun()
+{
 }
 
 bool ACCharacter::IsDead() const

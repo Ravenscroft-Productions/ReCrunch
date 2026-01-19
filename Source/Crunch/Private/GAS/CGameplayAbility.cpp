@@ -5,7 +5,13 @@
 
 #include "AbilitySystemBlueprintLibrary.h"
 #include "GameFramework/Character.h"
+#include "GAS/CAbilitySystemStatics.h"
 #include "Kismet/KismetSystemLibrary.h"
+
+UCGameplayAbility::UCGameplayAbility()
+{
+	ActivationBlockedTags.AddTag(UCAbilitySystemStatics::GetStunStatusTag());
+}
 
 FGameplayTag UCGameplayAbility::GetLaunchedAbilityActivationTag()
 {

@@ -15,6 +15,7 @@ class CRUNCH_API UCGameplayAbility : public UGameplayAbility
 {
 	GENERATED_BODY()
 public:
+	UCGameplayAbility();
 	static FGameplayTag GetLaunchedAbilityActivationTag();
 	
 protected:

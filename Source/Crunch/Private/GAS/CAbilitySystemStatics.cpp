@@ -12,3 +12,8 @@ FGameplayTag UCAbilitySystemStatics::GetDeadStatusTag()
 {
 	return FGameplayTag::RequestGameplayTag("Status.Dead");
 }
+
+FGameplayTag UCAbilitySystemStatics::GetStunStatusTag()
+{
+	return FGameplayTag::RequestGameplayTag("Status.Stun");
+}
