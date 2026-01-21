@@ -34,6 +34,10 @@ private:
 	UFUNCTION()
 	void StartLaunching(FGameplayEventData EventData);
 	
-	// Added to fix double launch
+	UFUNCTION()
+	void HandleComboChangeEvent(FGameplayEventData EventData);
+	
+	FName NextComboName;
+	
 	bool bHasLaunched = false;
 };
