@@ -6,7 +6,13 @@
 #include "GameplayTagsManager.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "GAS/CAbilitySystemStatics.h"
 #include "GAS/GA_Combo.h"
+
+UGA_UpperCut::UGA_UpperCut()
+{
+	BlockAbilitiesWithTag.AddTag(UCAbilitySystemStatics::GetBasicAttackAbilityTag());
+}
 
 void UGA_UpperCut::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
 {
@@ -37,6 +43,7 @@ void UGA_UpperCut::ActivateAbility(const FGameplayAbilitySpecHandle Handle, cons
 	NextComboName = NAME_None;
 }
 
+
 FGameplayTag UGA_UpperCut::GetUpperCutLaunchTag()
 {
 	return FGameplayTag::RequestGameplayTag("Ability.UpperCut.Launch");
@@ -59,6 +66,10 @@ void UGA_UpperCut::StartLaunching(FGameplayEventData EventData)
 	UAbilityTask_WaitGameplayEvent* WaitComboChangeEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UGA_Combo::GetComboChangedEventTag(), nullptr, false, false);
 	WaitComboChangeEvent->EventReceived.AddDynamic(this, &UGA_UpperCut::HandleComboChangeEvent);
 	WaitComboChangeEvent->ReadyForActivation();
+	
+	UAbilityTask_WaitGameplayEvent* WaitComboCommitEvent = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(this, UCAbilitySystemStatics::GetBasicAttackInputPressedTag());
+	WaitComboCommitEvent->EventReceived.AddDynamic(this, &UGA_UpperCut::HandleComboCommitEvent);
+	WaitComboCommitEvent->ReadyForActivation();
 }
 
 void UGA_UpperCut::HandleComboChangeEvent(FGameplayEventData EventData)
@@ -75,4 +86,9 @@ void UGA_UpperCut::HandleComboChangeEvent(FGameplayEventData EventData)
 	UGameplayTagsManager::Get().SplitGameplayTagFName(EventTag, TagNames);
 	NextComboName = TagNames.Last();
 	UE_LOG(LogTemp, Warning, TEXT("Next Combo Is: %s"), *NextComboName.ToString());
+}
+
+void UGA_UpperCut::HandleComboCommitEvent(FGameplayEventData EventData)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Combo Change Commited!"));
 }
