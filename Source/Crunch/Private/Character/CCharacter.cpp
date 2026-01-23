@@ -6,7 +6,6 @@
 #include "AbilitySystemBlueprintLibrary.h"
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAbilitySystemStatics.h"
 #include "GAS/CAttributeSet.h"
@@ -245,7 +244,6 @@ void ACCharacter::StartDeathSequence()
 	
 	PlayDeathAnimation();
 	SetStatusGaugeEnabled(false);
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_None);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	SetAIPerceptionStimuliSourceEnabled(false);
 }
@@ -256,7 +254,6 @@ void ACCharacter::Respawn()
 	SetAIPerceptionStimuliSourceEnabled(true);
 	SetRagdollEnabled(false);
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	GetCharacterMovement()->SetMovementMode(EMovementMode::MOVE_Walking);
 	GetMesh()->GetAnimInstance()->StopAllMontages(0.0f);
 	SetStatusGaugeEnabled(true);
 	
