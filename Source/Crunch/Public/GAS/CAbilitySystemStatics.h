@@ -19,6 +19,7 @@ public:
 	static FGameplayTag GetDeadStatusTag();
 	static FGameplayTag GetStunStatusTag();
 	static FGameplayTag GetBasicAttackInputPressedTag();
+	static FGameplayTag GetAimStatusTag();
 	
 	static float GetStaticCooldownDurationForAbility(const UGameplayAbility* Ability);
 	static float GetStaticCostForAbility(const UGameplayAbility* Ability);
