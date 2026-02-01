@@ -36,9 +36,13 @@ private:
 	FVector GetMoveFwdDir() const;
 	
 	/***********************************************************************/
+	/*                          Gameplay Ability                           */
+	/***********************************************************************/
+	virtual void OnAimStateChanged(bool bIsAiming) override;
+	
+	/***********************************************************************/
 	/*                               Input                                 */
 	/***********************************************************************/
-private:
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	UInputAction* JumpInputAction;
 	
@@ -70,4 +74,18 @@ private:
 	/***********************************************************************/
 	virtual void OnDead() override;
 	virtual void OnRespawn() override;
+	
+	/***********************************************************************/
+	/*                              Camera View                            */
+	/***********************************************************************/
+	UPROPERTY(EditDefaultsOnly, Category = "View")
+	FVector CameraAimLocalOffset;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "View")
+	float CameraLerpSpeed = 20.0f;
+	
+	FTimerHandle CameraLerpTimerHandle;
+	
+	void LerpCameraToLocalOffsetLocation(const FVector& Goal);
+	void TickCameraLocalOffsetLerp(FVector Goal);
 };
