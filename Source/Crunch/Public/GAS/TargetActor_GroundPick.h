@@ -16,12 +16,15 @@ class CRUNCH_API ATargetActor_GroundPick : public AGameplayAbilityTargetActor
 public:
 	ATargetActor_GroundPick();
 	void SetTargetAreaRadius(float NewRadius);
+	FORCEINLINE void SetTargetTraceRange(float NewRange) { TargetTraceRange = NewRange; }
 	virtual void ConfirmTargetingAndContinue() override;
 	void SetTargetOptions(bool bTargetFriendly, bool bTargetEnemy = true);
+	FORCEINLINE void SetShouldDrawDebug(bool bDrawDebug) { bShouldDrawDebug = bDrawDebug; }
 	
 protected:
 	bool bShouldTargetEnemy = true;
 	bool bShouldTargetFriendly= false;
+	bool bShouldDrawDebug = false;
 	
 	virtual void Tick(float DeltaTime) override;
 	FVector GetTargetPoint() const;

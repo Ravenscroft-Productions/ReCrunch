@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CGameplayAbility.h"
+#include "CGameplayAbilityTypes.h"
 #include "GA_GroundBlast.generated.h"
 
 class ATargetActor_GroundPick;
@@ -19,6 +20,15 @@ public:
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetAreaRadius = 300.0f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	float TargetTraceRange = 2000.0f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Damage")
+	FGenericDamageEffectDef DamageEffectDef;
+	
 	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
 	TSubclassOf<ATargetActor_GroundPick> TargetActorClass;
 	
