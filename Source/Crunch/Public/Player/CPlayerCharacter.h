@@ -8,6 +8,7 @@
 #include "GAS/CGameplayAbilityTypes.h"
 #include "CPlayerCharacter.generated.h"
 
+class UCHeroAttributeSet;
 class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
@@ -39,6 +40,9 @@ private:
 	/*                          Gameplay Ability                           */
 	/***********************************************************************/
 	virtual void OnAimStateChanged(bool bIsAiming) override;
+	
+	UPROPERTY()
+	UCHeroAttributeSet* HeroAttributeSet;
 	
 	/***********************************************************************/
 	/*                               Input                                 */

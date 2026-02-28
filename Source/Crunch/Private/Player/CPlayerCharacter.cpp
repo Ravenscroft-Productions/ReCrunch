@@ -12,6 +12,7 @@
 #include "Crunch/Crunch.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GAS/CAbilitySystemStatics.h"
+#include "GAS/CHeroAttributeSet.h"
 
 ACPlayerCharacter::ACPlayerCharacter()
 {
@@ -26,6 +27,8 @@ ACPlayerCharacter::ACPlayerCharacter()
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.0f, 0.0f);
+	
+	HeroAttributeSet = CreateDefaultSubobject<UCHeroAttributeSet>("Hero Attribute Set");
 }
 
 void ACPlayerCharacter::PawnClientRestart()
