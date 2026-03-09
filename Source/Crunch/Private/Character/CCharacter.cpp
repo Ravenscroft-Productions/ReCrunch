@@ -119,6 +119,8 @@ void ACCharacter::BindGASChangeDelegates()
 		CAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetDeadStatusTag()).AddUObject(this, &ACCharacter::DeadTagUpdated);
 		CAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetStunStatusTag()).AddUObject(this, &ACCharacter::StunTagUpdated);
 		CAbilitySystemComponent->RegisterGameplayTagEvent(UCAbilitySystemStatics::GetAimStatusTag()).AddUObject(this, &ACCharacter::AimTagUpdated);
+		
+		CAbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetMoveSpeedAttribute()).AddUObject(this, &ACCharacter::MoveSpeedUpdated);
 	}
 }
 
@@ -165,6 +167,11 @@ void ACCharacter::SetIsAiming(bool bIsAiming)
 void ACCharacter::OnAimStateChanged(bool bIsAiming)
 {	
 	// Override in child class
+}
+
+void ACCharacter::MoveSpeedUpdated(const FOnAttributeChangeData& Data)
+{
+	GetCharacterMovement()->MaxWalkSpeed = Data.NewValue;
 }
 
 void ACCharacter::ConfigureOverheadStatusWidget()
