@@ -3,12 +3,15 @@
 
 #include "GAS/CAbilitySystemComponent.h"
 
+#include "BehaviorTree/BehaviorTreeTypes.h"
+#include "GAS/CAbilitySystemStatics.h"
 #include "GAS/CAttributeSet.h"
 #include "GAS/CHeroAttributeSet.h"
 
 UCAbilitySystemComponent::UCAbilitySystemComponent()
 {
 	GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetHealthAttribute()).AddUObject(this, &UCAbilitySystemComponent::HealthUpdated);
+	GetGameplayAttributeValueChangeDelegate(UCAttributeSet::GetManaAttribute()).AddUObject(this, &UCAbilitySystemComponent::ManaUpdated);
 	GenericConfirmInputID = (int32)ECAbilityInputID::Confirm;
 	GenericCancelInputID = (int32)ECAbilityInputID::Cancel;	
 }
@@ -96,10 +99,66 @@ void UCAbilitySystemComponent::AuthApplyGameplayEffect(TSubclassOf<UGameplayEffe
 
 void UCAbilitySystemComponent::HealthUpdated(const FOnAttributeChangeData& ChangeData)
 {
-	if (!GetOwner()) return;
+	if (!GetOwner() || !GetOwner()->HasAuthority()) return;
 	
-	if (ChangeData.NewValue <= 0 && GetOwner()->HasAuthority() && DeathEffect)
+	bool bFound = false;
+	float MaxHealth = GetGameplayAttributeValue(UCAttributeSet::GetMaxHealthAttribute(), bFound);
+	if (bFound && ChangeData.NewValue >= MaxHealth)
 	{
-		AuthApplyGameplayEffect(DeathEffect);
+		if (!HasMatchingGameplayTag(UCAbilitySystemStatics::GetHealthFullStatusTag()))
+		{
+			// This is done locally only.
+			AddLooseGameplayTag(UCAbilitySystemStatics::GetHealthFullStatusTag());
+		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UCAbilitySystemStatics::GetHealthFullStatusTag());
+	}
+	
+	if (ChangeData.NewValue <= 0)
+	{
+		if (!HasMatchingGameplayTag(UCAbilitySystemStatics::GetHealthEmptyStatusTag()))
+		{
+			AddLooseGameplayTag(UCAbilitySystemStatics::GetHealthEmptyStatusTag());
+			
+			if (DeathEffect) AuthApplyGameplayEffect(DeathEffect);
+		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UCAbilitySystemStatics::GetHealthEmptyStatusTag());
+	}
+}
+
+void UCAbilitySystemComponent::ManaUpdated(const FOnAttributeChangeData& ChangeData)
+{
+	if (!GetOwner() || !GetOwner()->HasAuthority()) return;
+	
+	bool bFound = false;
+	float MaxMana = GetGameplayAttributeValue(UCAttributeSet::GetMaxManaAttribute(), bFound);
+	if (bFound && ChangeData.NewValue >= MaxMana)
+	{
+		if (!HasMatchingGameplayTag(UCAbilitySystemStatics::GetManaFullStatusTag()))
+		{
+			// This is done locally only.
+			AddLooseGameplayTag(UCAbilitySystemStatics::GetManaFullStatusTag());
+		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UCAbilitySystemStatics::GetManaFullStatusTag());
+	}
+	
+	if (ChangeData.NewValue <= 0)
+	{
+		if (!HasMatchingGameplayTag(UCAbilitySystemStatics::GetManaEmptyStatusTag()))
+		{
+			AddLooseGameplayTag(UCAbilitySystemStatics::GetManaEmptyStatusTag());
+		}
+	}
+	else
+	{
+		RemoveLooseGameplayTag(UCAbilitySystemStatics::GetManaEmptyStatusTag());
 	}
 }
