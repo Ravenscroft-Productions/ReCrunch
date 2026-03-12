@@ -24,7 +24,10 @@ public:
 	static FGameplayTag GetHealthFullStatusTag();
 	static FGameplayTag GetHealthEmptyStatusTag();
 	static FGameplayTag GetManaFullStatusTag();
-	static FGameplayTag GetManaEmptyStatusTag();	
+	static FGameplayTag GetManaEmptyStatusTag();
+	static FGameplayTag GetHeroRoleTag();
+	
+	static bool IsHero(const AActor* ActorToCheck);
 	
 	static float GetStaticCooldownDurationForAbility(const UGameplayAbility* Ability);
 	static float GetStaticCostForAbility(const UGameplayAbility* Ability);
