@@ -26,6 +26,8 @@ public:
 	static FGameplayTag GetManaFullStatusTag();
 	static FGameplayTag GetManaEmptyStatusTag();
 	static FGameplayTag GetHeroRoleTag();
+	static FGameplayTag GetExperienceAttributeTag();
+	static FGameplayTag GetGoldAttributeTag();
 	
 	static bool IsHero(const AActor* ActorToCheck);
 	
