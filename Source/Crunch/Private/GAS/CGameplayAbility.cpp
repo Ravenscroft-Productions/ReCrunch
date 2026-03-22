@@ -4,8 +4,10 @@
 #include "GAS/CGameplayAbility.h"
 
 #include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
 #include "GAS/CAbilitySystemStatics.h"
+#include "GAS/GAP_Launched.h"
 #include "Kismet/KismetSystemLibrary.h"
 
 UCGameplayAbility::UCGameplayAbility()
@@ -13,9 +15,15 @@ UCGameplayAbility::UCGameplayAbility()
 	ActivationBlockedTags.AddTag(UCAbilitySystemStatics::GetStunStatusTag());
 }
 
-FGameplayTag UCGameplayAbility::GetLaunchedAbilityActivationTag()
+bool UCGameplayAbility::CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags, const FGameplayTagContainer* TargetTags, FGameplayTagContainer* OptionalRelevantTags) const
 {
-	return FGameplayTag::RequestGameplayTag("Ability.Passive.Launch.Activate");
+	FGameplayAbilitySpec* AbilitySpec = ActorInfo->AbilitySystemComponent->FindAbilitySpecFromHandle(Handle);
+	if (AbilitySpec && AbilitySpec->Level <= 0)
+	{
+		return false;
+	}
+	
+	return Super::CanActivateAbility(Handle, ActorInfo, SourceTags, TargetTags, OptionalRelevantTags);
 }
 
 UAnimInstance* UCGameplayAbility::GetOwnerAnimInstance() const
@@ -98,7 +106,7 @@ void UCGameplayAbility::PushTarget(AActor* Target, const FVector& PushVel)
 	HitData->HitResult = HitResult;
 	EventData.TargetData.Add(HitData);
 	
-	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, GetLaunchedAbilityActivationTag(), EventData);
+	UAbilitySystemBlueprintLibrary::SendGameplayEventToActor(Target, UGAP_Launched::GetLaunchedAbilityActivationTag(), EventData);
 }
 
 void UCGameplayAbility::PushTargets(const TArray<AActor*>& Targets, const FVector& PushVel)

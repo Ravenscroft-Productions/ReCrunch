@@ -31,3 +31,8 @@ void UGAP_Launched::ActivateAbility(const FGameplayAbilitySpecHandle Handle, con
 		K2_EndAbility();
 	}
 }
+
+FGameplayTag UGAP_Launched::GetLaunchedAbilityActivationTag()
+{
+	return FGameplayTag::RequestGameplayTag("Ability.Passive.Launch.Activate");
+}

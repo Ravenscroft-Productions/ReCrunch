@@ -16,7 +16,7 @@ class CRUNCH_API UCGameplayAbility : public UGameplayAbility
 	GENERATED_BODY()
 public:
 	UCGameplayAbility();
-	static FGameplayTag GetLaunchedAbilityActivationTag();
+	virtual bool CanActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayTagContainer* SourceTags = nullptr, const FGameplayTagContainer* TargetTags = nullptr, FGameplayTagContainer* OptionalRelevantTags = nullptr) const override;
 	
 protected:
 	UAnimInstance* GetOwnerAnimInstance() const;

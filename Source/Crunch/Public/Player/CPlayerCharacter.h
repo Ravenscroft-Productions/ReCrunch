@@ -57,6 +57,9 @@ private:
 	UInputAction* MoveInputAction;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* LearnAbilityLeaderAction;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TMap<ECAbilityInputID, UInputAction*> GameplayAbilityInputActions;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
@@ -64,8 +67,12 @@ private:
 	
 	void HandleLookInput(const FInputActionValue& InputActionValue);
 	void HandleMoveInput(const FInputActionValue& InputActionValue);
+	void LearnAbilityLeaderDown(const FInputActionValue& InputActionValue);
+	void LearnAbilityLeaderUp(const FInputActionValue& InputActionValue);
 	void HandleAbilityInput(const FInputActionValue& InputActionValue, ECAbilityInputID InputID);
 	void SetInputEnabledFromPlayerController(bool bEnabled);
+	
+	bool bIsLearnAbilityLeaderDown = false;
 	
 	/***********************************************************************/
 	/*                                 Stun                                */
