@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/IUserObjectListEntry.h"
+#include "GameplayEffectTypes.h"
 #include "AbilityGauge.generated.h"
 
+struct FGameplayAbilitySpec;
+class UAbilitySystemComponent;
 class UGameplayAbility;
 class UTextBlock;
 class UImage;
@@ -51,8 +54,20 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Visual")
 	FName CooldownPercentParamName = "Percent";
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	FName AbilityLevelParamName = "Level";
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	FName CanCastAbilityParamName = "CanCast";
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Visual")
+	FName UpgradePointAvailableParamName = "UpgradeAvailable";
+	
 	UPROPERTY(Meta = (BindWidget))
 	UImage* Icon;
+	
+	UPROPERTY(Meta = (BindWidget))
+	UImage* LevelGauge;
 	
 	UPROPERTY(Meta = (BindWidget))
 	UTextBlock* CooldownCounterText;
@@ -70,6 +85,10 @@ private:
 	void StartCooldown(float CooldownTimeRemaining, float CooldownDuration);
 	void CooldownFinished();
 	void UpdateCooldown();
+	const FGameplayAbilitySpec* GetAbilitySpec();
+	void AbilitySpecUpdated(const FGameplayAbilitySpec& AbilitySpec);
+	void UpdateCanCast();
+	void UpgradePointUpdated(const FOnAttributeChangeData& Data);
 	
 	float CachedCooldownDuration;
 	float CachedCooldownTimeRemaining;
@@ -77,4 +96,7 @@ private:
 	FTimerHandle CooldownTimerUpdateHandle;
 	FNumberFormattingOptions WholeNumberFormattingOptions;
 	FNumberFormattingOptions TwoDigitNumberFormattingOptions;
+	const UAbilitySystemComponent* OwnerAbilitySystemComponent;
+	const FGameplayAbilitySpec* CachedAbilitySpec;
+	bool bIsAbilityLearned = false;
 };
