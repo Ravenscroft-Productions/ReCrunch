@@ -23,10 +23,7 @@ public:
 private:
 	void SetupWaitComboInputPress();
 	void TryCommitCombo();
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
-	float TargetSweepSphereRadius = 30.0f;
-	
+		
 	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Effect")
 	TSubclassOf<UGameplayEffect> DefaultDamageEffect;
 	
