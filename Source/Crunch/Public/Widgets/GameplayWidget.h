@@ -7,6 +7,7 @@
 #include "GAS/CGameplayAbilityTypes.h"
 #include "GameplayWidget.generated.h"
 
+class UShopWidget;
 class UStatsGauge;
 class UAbilityListView;
 class UAbilitySystemComponent;
@@ -46,6 +47,9 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	UStatsGauge* StrengthGauge;
+	
+	UPROPERTY(meta = (BindWidget))
+	UShopWidget* ShopWidget;
 	
 	UPROPERTY()
 	UAbilitySystemComponent* OwnerAbilitySystemComponent;
