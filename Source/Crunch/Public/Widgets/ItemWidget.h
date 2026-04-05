@@ -6,6 +6,8 @@
 #include "Blueprint/UserWidget.h"
 #include "ItemWidget.generated.h"
 
+class UPA_ShopItem;
+class UItemTooltip;
 class UImage;
 /**
  * 
@@ -17,10 +19,16 @@ class CRUNCH_API UItemWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	virtual void SetIcon(UTexture2D* IconTexture);
+
+protected:
+	UItemTooltip* SetTooltipWidget(const UPA_ShopItem* Item);
 	
 private:
 	UPROPERTY(meta = (BindWidget))
 	UImage* ItemIcon;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Tooltip")
+	TSubclassOf<UItemTooltip> ItemTooltipClass;
 	
 	virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
