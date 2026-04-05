@@ -7,6 +7,7 @@
 #include "GAS/CAbilitySystemComponent.h"
 #include "GAS/CAttributeSet.h"
 #include "Widgets/AbilityListView.h"
+#include "Widgets/ShopWidget.h"
 #include "Widgets/ValueGauge.h"
 
 void UGameplayWidget::NativeConstruct()
@@ -25,4 +26,30 @@ void UGameplayWidget::NativeConstruct()
 void UGameplayWidget::ConfigureAbilities(const TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>>& Abilities)
 {	
 	AbilityListView->ConfigureAbilities(Abilities);
+}
+
+void UGameplayWidget::ToggleShop()
+{
+	if (ShopWidget->GetVisibility() == ESlateVisibility::HitTestInvisible)
+	{
+		ShopWidget->SetVisibility(ESlateVisibility::Visible);
+		PlayShopPopUpAnimation(true);
+	}
+	else
+	{
+		ShopWidget->SetVisibility(ESlateVisibility::HitTestInvisible);
+		PlayShopPopUpAnimation(false);
+	}
+}
+
+void UGameplayWidget::PlayShopPopUpAnimation(bool bPlayForward)
+{
+	if (bPlayForward)
+	{
+		PlayAnimationForward(ShopPopUpAnimation);
+	}
+	else
+	{
+		PlayAnimationReverse(ShopPopUpAnimation);
+	}
 }

@@ -22,6 +22,7 @@ class CRUNCH_API UGameplayWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	void ConfigureAbilities(const TMap<ECAbilityInputID, TSubclassOf<UGameplayAbility>>& Abilities);
+	void ToggleShop();
 	
 private:
 	UPROPERTY(meta = (BindWidget))
@@ -51,6 +52,11 @@ private:
 	UPROPERTY(meta = (BindWidget))
 	UShopWidget* ShopWidget;
 	
+	UPROPERTY(Transient, meta = (BindWidgetAnim))
+	UWidgetAnimation* ShopPopUpAnimation;
+	
 	UPROPERTY()
 	UAbilitySystemComponent* OwnerAbilitySystemComponent;
+	
+	void PlayShopPopUpAnimation(bool bPlayForward);
 };

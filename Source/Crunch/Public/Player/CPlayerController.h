@@ -7,6 +7,8 @@
 #include "GameFramework/PlayerController.h"
 #include "CPlayerController.generated.h"
 
+class UInputAction;
+class UInputMappingContext;
 class UGameplayWidget;
 class ACPlayerCharacter;
 /**
@@ -30,6 +32,7 @@ public:
 	virtual FGenericTeamId GetGenericTeamId() const override;
 	
 	virtual void GetLifetimeReplicatedProps(TArray<class FLifetimeProperty>& OutLifetimeProps) const override;
+	virtual void SetupInputComponent() override;
 	
 private:
 	void SpawnGameplayWidget();
@@ -45,4 +48,13 @@ private:
 	
 	UPROPERTY(Replicated)
 	FGenericTeamId TeamID;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputMappingContext* UIInputMapping;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	UInputAction* ShopToggleInputAction;
+	
+	UFUNCTION()
+	void ToggleShop();
 };
