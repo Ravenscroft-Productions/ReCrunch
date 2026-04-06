@@ -7,20 +7,29 @@
 #include "InventoryComponent.generated.h"
 
 
+class UPA_ShopItem;
+class UAbilitySystemComponent;
+
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CRUNCH_API UInventoryComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this component's properties
-	UInventoryComponent();
-
+	UInventoryComponent();	
+	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
+	float GetGold() const;
+	
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
+	
+private:
+	UPROPERTY()
+	UAbilitySystemComponent* OwnerAbilitySystemComponent;
 
-public:
-	// Called every frame
-	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+/***************************************************************/
+/*                          Server                             */
+/***************************************************************/
+	UFUNCTION(Server, Reliable, WithValidation)
+	void Server_Purchase(const UPA_ShopItem* ItemToPurchase);
 };

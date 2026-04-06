@@ -8,6 +8,7 @@
 #include "GAS/CGameplayAbilityTypes.h"
 #include "CPlayerCharacter.generated.h"
 
+class UInventoryComponent;
 class UCHeroAttributeSet;
 class UInputMappingContext;
 class UInputAction;
@@ -99,4 +100,10 @@ private:
 	
 	void LerpCameraToLocalOffsetLocation(const FVector& Goal);
 	void TickCameraLocalOffsetLerp(FVector Goal);
+	
+	/***********************************************************************/
+	/*                               Inventory                             */
+	/***********************************************************************/
+private:
+	UInventoryComponent* InventoryComponent;
 };
