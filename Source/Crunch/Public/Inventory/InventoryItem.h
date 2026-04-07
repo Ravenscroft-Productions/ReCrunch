@@ -6,6 +6,30 @@
 #include "UObject/Object.h"
 #include "InventoryItem.generated.h"
 
+USTRUCT()
+struct FInventoryItemHandle
+{
+	GENERATED_BODY()
+public:
+	FInventoryItemHandle();
+	static FInventoryItemHandle InvalidHandle();
+	static FInventoryItemHandle CreateHandle();
+	bool IsValid() const;
+	uint32 GetHandleId() const { return HandleId; }
+	
+private:
+	UPROPERTY()
+	uint32 HandleId;
+
+	explicit FInventoryItemHandle(uint32 Id);
+	
+	static uint32 GenerateNextId();
+	static uint32 GetInvalidId();
+};
+
+bool operator==(const FInventoryItemHandle& Lhs, const FInventoryItemHandle& Rhs);
+uint32 GetTypeHash(const FInventoryItemHandle& Key);
+
 /**
  * 
  */
