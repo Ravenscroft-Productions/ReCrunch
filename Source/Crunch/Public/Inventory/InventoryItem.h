@@ -3,9 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "ActiveGameplayEffectHandle.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "UObject/Object.h"
 #include "InventoryItem.generated.h"
 
+class UAbilitySystemComponent;
 class UPA_ShopItem;
 
 USTRUCT()
@@ -43,10 +46,13 @@ public:
 	void InitItem(const FInventoryItemHandle& NewHandle, const UPA_ShopItem* NewShopItem);
 	const UPA_ShopItem* GetShopItem() const { return ShopItem; }
 	FInventoryItemHandle GetHandle() const { return Handle; }
+	void ApplyGASModifications(UAbilitySystemComponent* AbilitySystemComponent);
 	
 private:
 	UPROPERTY()
 	const UPA_ShopItem* ShopItem;
 	
 	FInventoryItemHandle Handle;
+	FActiveGameplayEffectHandle AppliedEquippedEffectHandle;
+	FGameplayAbilitySpecHandle GrantedAbilitySpecHandle;
 };
