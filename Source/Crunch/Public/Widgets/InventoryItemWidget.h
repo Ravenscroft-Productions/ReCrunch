@@ -19,6 +19,7 @@ public:
 	virtual void NativeConstruct() override;
 	void UpdateInventoryItem(const UInventoryItem* Item);
 	bool IsEmpty() const;
+	void SetSlotNumber(int NewSlotNumber);
 	FORCEINLINE int GetSlotNumber() const { return SlotNumber; }
 	void EmptySlot();
 	

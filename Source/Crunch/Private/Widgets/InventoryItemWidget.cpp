@@ -47,6 +47,11 @@ bool UInventoryItemWidget::IsEmpty() const
 	return !InventoryItem || !InventoryItem->IsValid();
 }
 
+void UInventoryItemWidget::SetSlotNumber(int NewSlotNumber)
+{
+	SlotNumber = NewSlotNumber;
+}
+
 void UInventoryItemWidget::EmptySlot()
 {
 	InventoryItem = nullptr;
