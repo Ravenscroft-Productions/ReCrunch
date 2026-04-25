@@ -22,10 +22,9 @@ public:
 	void SetSlotNumber(int NewSlotNumber);
 	FORCEINLINE int GetSlotNumber() const { return SlotNumber; }
 	void EmptySlot();
-	
-private:
 	void UpdateStackCount();
 	
+private:
 	UPROPERTY(EditDefaultsOnly, Category = "Visual")
 	UTexture2D* EmptyTexture;
 	

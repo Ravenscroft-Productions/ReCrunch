@@ -12,6 +12,7 @@ class UPA_ShopItem;
 class UAbilitySystemComponent;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemAddedDelegate, const UInventoryItem* /*NewItem*/);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemStackCountChangedDelegate, const FInventoryItemHandle&, int /*NewCount*/);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CRUNCH_API UInventoryComponent : public UActorComponent
@@ -21,6 +22,7 @@ class CRUNCH_API UInventoryComponent : public UActorComponent
 public:
 	UInventoryComponent();	
 	FOnItemAddedDelegate OnItemAdded;
+	FOnItemStackCountChangedDelegate OnItemStackCountChanged;
 	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
 	float GetGold() const;
 	FORCEINLINE int GetCapacity() const { return Capacity; }
@@ -56,4 +58,7 @@ private:
 private:
 	UFUNCTION(Client, Reliable)
 	void Client_ItemAdded(FInventoryItemHandle AssignedHandle, const UPA_ShopItem* Item);
+	
+	UFUNCTION(Client, Reliable)
+	void Client_ItemStackChanged(FInventoryItemHandle Handle, int NewCount);
 };
