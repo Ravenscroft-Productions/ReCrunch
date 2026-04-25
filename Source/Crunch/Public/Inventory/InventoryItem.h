@@ -51,6 +51,14 @@ public:
 	void ApplyGASModifications(UAbilitySystemComponent* AbilitySystemComponent);
 	FORCEINLINE int GetStackCount() const { return StackCount; }
 	void SetSlot(int NewSlot);
+	bool IsStackFull() const;
+	bool IsForItem(const UPA_ShopItem* Item) const;
+	// returns true if was able to add
+	bool AddStackCount();
+	// returns true if the stack is not empty after reducing
+	bool ReduceStackCount();
+	// returns true if was able to set
+	bool SetStackCount(int NewStackCount);
 	
 private:
 	UPROPERTY()
