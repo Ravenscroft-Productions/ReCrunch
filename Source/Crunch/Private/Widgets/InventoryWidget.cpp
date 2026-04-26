@@ -31,6 +31,8 @@ void UInventoryWidget::NativeConstruct()
 					UWrapBoxSlot* NewItemSlot = ItemList->AddChildToWrapBox(NewEmptyWidget);
 					NewItemSlot->SetPadding(FMargin(2.0f));
 					ItemWidgets.Add(NewEmptyWidget);
+					
+					NewEmptyWidget->OnInventoryItemDropped.AddUObject(this, &UInventoryWidget::HandleItemDragDrop);
 				}
 			}
 		}
@@ -72,4 +74,29 @@ UInventoryItemWidget* UInventoryWidget::GetNextAvailableSlot() const
 	}
 	
 	return nullptr;
+}
+
+void UInventoryWidget::HandleItemDragDrop(UInventoryItemWidget* DestinationWidget, UInventoryItemWidget* SourceWidget)
+{
+	const UInventoryItem* SourceItem = SourceWidget->GetInventoryItem();
+	const UInventoryItem* DestinationItem = DestinationWidget->GetInventoryItem();
+	
+	DestinationWidget->UpdateInventoryItem(SourceItem);
+	SourceWidget->UpdateInventoryItem(DestinationItem);
+	
+	PopulatedItemEntryWidgets[DestinationWidget->GetItemHandle()] = DestinationWidget;
+	
+	if (InventoryComponent)
+	{
+		InventoryComponent->ItemSlotChanged(DestinationWidget->GetItemHandle(), DestinationWidget->GetSlotNumber());
+	}
+	
+	if (!SourceWidget->IsEmpty())
+	{
+		PopulatedItemEntryWidgets[SourceWidget->GetItemHandle()] = SourceWidget;
+		if (InventoryComponent)
+		{
+			InventoryComponent->ItemSlotChanged(SourceWidget->GetItemHandle(), SourceWidget->GetSlotNumber());
+		}
+	}
 }
