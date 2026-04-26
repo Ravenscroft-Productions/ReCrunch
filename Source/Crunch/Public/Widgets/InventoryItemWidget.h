@@ -23,6 +23,7 @@ public:
 	FORCEINLINE int GetSlotNumber() const { return SlotNumber; }
 	void EmptySlot();
 	void UpdateStackCount();
+	UTexture2D* GetIconTexture() const;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Visual")
