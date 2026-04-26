@@ -6,6 +6,7 @@
 #include "Components/TextBlock.h"
 #include "Inventory/InventoryItem.h"
 #include "Inventory/PA_ShopItem.h"
+#include "Widgets/InventoryItemDragAndDropOp.h"
 #include "Widgets/ItemTooltip.h"
 
 void UInventoryItemWidget::NativeConstruct()
@@ -80,4 +81,43 @@ UTexture2D* UInventoryItemWidget::GetIconTexture() const
 	}
 	
 	return nullptr;
+}
+
+FInventoryItemHandle UInventoryItemWidget::GetItemHandle() const
+{
+	if (!IsEmpty())
+	{
+		return InventoryItem->GetHandle();
+	}
+	
+	return FInventoryItemHandle::InvalidHandle();
+}
+
+void UInventoryItemWidget::NativeOnDragDetected(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent, UDragDropOperation*& OutOperation)
+{
+	Super::NativeOnDragDetected(InGeometry, InMouseEvent, OutOperation);
+	
+	if (!IsEmpty() && DragDropOpClass)
+	{
+		UInventoryItemDragAndDropOp* DragDropOp = NewObject<UInventoryItemDragAndDropOp>(this, DragDropOpClass);
+		if (DragDropOp)
+		{
+			DragDropOp->SetDraggedItem(this);
+			OutOperation = DragDropOp;
+		}
+	}
+}
+
+bool UInventoryItemWidget::NativeOnDrop(const FGeometry& InGeometry, const FDragDropEvent& InDragDropEvent, UDragDropOperation* InOperation)
+{
+	if (UInventoryItemWidget* OtherWidget = Cast<UInventoryItemWidget>(InOperation->Payload))
+	{
+		if (OtherWidget && !OtherWidget->IsEmpty())
+		{
+			OnInventoryItemDropped.Broadcast(this, OtherWidget);
+			return true;
+		}
+	}
+	
+	return Super::NativeOnDrop(InGeometry, InDragDropEvent, InOperation);
 }
