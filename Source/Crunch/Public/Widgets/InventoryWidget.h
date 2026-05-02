@@ -7,6 +7,7 @@
 #include "Inventory/InventoryItem.h"
 #include "InventoryWidget.generated.h"
 
+class UInventoryContextMenuWidget;
 class UInventoryItemWidget;
 class UInventoryComponent;
 class UWrapBox;
@@ -20,6 +21,12 @@ class CRUNCH_API UInventoryWidget : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
+	TSubclassOf<UInventoryContextMenuWidget> ContextMenuWidgetClass;
+	
+	UPROPERTY()
+	UInventoryContextMenuWidget* ContextMenuWidget;
+	
 	UPROPERTY(meta = (BindWidget))
 	UWrapBox* ItemList;
 	
@@ -37,4 +44,14 @@ private:
 	UInventoryItemWidget* GetNextAvailableSlot() const;
 	void HandleItemDragDrop(UInventoryItemWidget* DestinationWidget, UInventoryItemWidget* SourceWidget);
 	void ItemRemoved(const FInventoryItemHandle& ItemHandle);
+	void SpawnContextMenu();
+	
+	UFUNCTION()
+	void SellFocusedItem();
+	
+	UFUNCTION()
+	void UseFocusedItem();
+	
+	void SetContextMenuVisible(bool bContextMenuVisible);
+	void ToggleContextMenu(const FInventoryItemHandle& ItemHandle);
 };
