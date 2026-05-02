@@ -12,7 +12,8 @@ class UInventoryItemDragAndDropOp;
 class UInventoryItem;
 class UTextBlock;
 
-DECLARE_MULTICAST_DELEGATE_TwoParams(FOnInventoryItemDropped, UInventoryItemWidget* /*Destination Widget*/, UInventoryItemWidget* /*Source Widget*/)
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnInventoryItemDropped, UInventoryItemWidget* /*Destination Widget*/, UInventoryItemWidget* /*Source Widget*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnButtonClick, const FInventoryItemHandle& /*Item Handle*/);
 /**
  * 
  */
@@ -22,6 +23,8 @@ class CRUNCH_API UInventoryItemWidget : public UItemWidget
 	GENERATED_BODY()
 public:
 	FOnInventoryItemDropped OnInventoryItemDropped;
+	FOnButtonClick OnLeftButtonClicked;
+	FOnButtonClick OnRightButtonClicked;
 	
 	virtual void NativeConstruct() override;
 	void UpdateInventoryItem(const UInventoryItem* Item);
@@ -55,6 +58,8 @@ private:
 	
 	int SlotNumber;
 	
+	virtual void RightButtonClicked() override;
+	virtual void LeftButtonClicked() override;
 	/***********************************************/
 	/*                Drag and Drop                */
 	/***********************************************/
