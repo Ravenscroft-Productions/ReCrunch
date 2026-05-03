@@ -20,6 +20,8 @@ class CRUNCH_API UInventoryWidget : public UUserWidget
 	GENERATED_BODY()
 public:
 	virtual void NativeConstruct() override;
+	virtual void NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent) override;
+	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Inventory")
 	TSubclassOf<UInventoryContextMenuWidget> ContextMenuWidgetClass;
@@ -38,6 +40,7 @@ private:
 	
 	TArray<UInventoryItemWidget*> ItemWidgets;
 	TMap<FInventoryItemHandle, UInventoryItemWidget*> PopulatedItemEntryWidgets;
+	FInventoryItemHandle CurrentFocusedItemHandle;
 	
 	void ItemAdded(const UInventoryItem* InventoryItem);
 	void ItemStackCountChanged(const FInventoryItemHandle& Handle, int NewCount);
@@ -45,13 +48,13 @@ private:
 	void HandleItemDragDrop(UInventoryItemWidget* DestinationWidget, UInventoryItemWidget* SourceWidget);
 	void ItemRemoved(const FInventoryItemHandle& ItemHandle);
 	void SpawnContextMenu();
+	void SetContextMenuVisible(bool bContextMenuVisible);
+	void ToggleContextMenu(const FInventoryItemHandle& ItemHandle);
+	void ClearContextMenu();
 	
 	UFUNCTION()
 	void SellFocusedItem();
 	
 	UFUNCTION()
 	void UseFocusedItem();
-	
-	void SetContextMenuVisible(bool bContextMenuVisible);
-	void ToggleContextMenu(const FInventoryItemHandle& ItemHandle);
 };

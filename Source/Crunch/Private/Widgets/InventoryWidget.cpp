@@ -3,6 +3,8 @@
 
 #include "Widgets/InventoryWidget.h"
 
+#include "Blueprint/SlateBlueprintLibrary.h"
+#include "Blueprint/WidgetLayoutLibrary.h"
 #include "Components/WrapBox.h"
 #include "Components/WrapBoxSlot.h"
 #include "Inventory/InventoryComponent.h"
@@ -41,6 +43,16 @@ void UInventoryWidget::NativeConstruct()
 			}
 			SpawnContextMenu();
 		}
+	}
+}
+
+void UInventoryWidget::NativeOnFocusChanging(const FWeakWidgetPath& PreviousFocusPath, const FWidgetPath& NewWidgetPath, const FFocusEvent& InFocusEvent)
+{
+	Super::NativeOnFocusChanging(PreviousFocusPath, NewWidgetPath, InFocusEvent);
+	
+	if (!NewWidgetPath.ContainsWidget(ContextMenuWidget->GetCachedWidget().Get()))
+	{
+		ClearContextMenu();
 	}
 }
 
@@ -150,5 +162,44 @@ void UInventoryWidget::SetContextMenuVisible(bool bContextMenuVisible)
 
 void UInventoryWidget::ToggleContextMenu(const FInventoryItemHandle& ItemHandle)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Trying to toggle context menu"));
+	if (CurrentFocusedItemHandle == ItemHandle)
+	{
+		ClearContextMenu();
+		return;
+	}
+	
+	CurrentFocusedItemHandle = ItemHandle;
+	UInventoryItemWidget** ItemWidgetPtrPtr = PopulatedItemEntryWidgets.Find(ItemHandle);
+	if (!ItemWidgetPtrPtr) return;
+	
+	UInventoryItemWidget* ItemWidget = *ItemWidgetPtrPtr;
+	if (!ItemWidget) return;
+	
+	SetContextMenuVisible(true);
+	FVector2D ItemAbsPos = ItemWidget->GetCachedGeometry().GetAbsolutePositionAtCoordinates(FVector2D{1.0f,0.5f});
+	
+	FVector2D ItemWidgetPixelPos, ItemWidgetViewportPos;
+	USlateBlueprintLibrary::AbsoluteToViewport(this, ItemAbsPos, ItemWidgetPixelPos, ItemWidgetViewportPos);
+	
+	APlayerController* OwningPlayerController = GetOwningPlayer();
+	if (OwningPlayerController)
+	{
+		int ViewportSizeX, ViewportSizeY;
+		OwningPlayerController->GetViewportSize(ViewportSizeX, ViewportSizeY);
+		float Scale = UWidgetLayoutLibrary::GetViewportScale(this);
+		
+		int Overshoot = ItemWidgetPixelPos.Y + ContextMenuWidget->GetDesiredSize().Y * Scale - ViewportSizeY;
+		if (Overshoot > 0)
+		{
+			ItemWidgetPixelPos.Y -= Overshoot;
+		}
+	}
+	
+	ContextMenuWidget->SetPositionInViewport(ItemWidgetPixelPos);
+}
+
+void UInventoryWidget::ClearContextMenu()
+{
+	ContextMenuWidget->SetVisibility(ESlateVisibility::Hidden);
+	CurrentFocusedItemHandle = FInventoryItemHandle::InvalidHandle();
 }
