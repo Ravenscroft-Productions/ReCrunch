@@ -243,8 +243,7 @@ void UInventoryComponent::CheckItemCombination(const UInventoryItem* NewItem)
 		
 		for (UInventoryItem* Ingredient : Ingredients)
 		{
-			RemoveItem(Ingredient);
-			
+			RemoveItem(Ingredient);			
 		}
 		
 		GrantItem(CombinationItem);
