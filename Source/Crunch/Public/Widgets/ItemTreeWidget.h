@@ -16,6 +16,9 @@ UCLASS()
 class CRUNCH_API UItemTreeWidget : public UUserWidget
 {
 	GENERATED_BODY()
+public:
+	void DrawFromNode(const ITreeNodeInterface* NodeInterface);
+	
 private:
 	void ClearTree();
 	UUserWidget* CreateWidgetForNode(const ITreeNodeInterface* Node, UCanvasPanelSlot*& OutCanvasSlot);
@@ -48,4 +51,6 @@ private:
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Tree")
 	FVector2D DestinationPortDirection = FVector2D{ 0.0f, 90.0f };
+	
+	const UObject* CurrentCenterItem;
 };
