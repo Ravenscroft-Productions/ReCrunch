@@ -20,6 +20,7 @@ private:
 	void ClearTree();
 	UUserWidget* CreateWidgetForNode(const ITreeNodeInterface* Node, UCanvasPanelSlot*& OutCanvasSlot);
 	void CreateConnection(const UUserWidget* From, UUserWidget* To);
+	void DrawStream(bool bUpperStream, const ITreeNodeInterface* StartingNodeInterface, UUserWidget* StartingNodeWidget, UCanvasPanelSlot* StartingNodeSlot , int StartingNodeDepth, float& NextLeafXPosition, TArray<UCanvasPanelSlot*>& OutStreamSlots);
 	
 	UPROPERTY(meta = (BindWidget))
 	UCanvasPanel* RootPanel;
