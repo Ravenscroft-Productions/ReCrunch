@@ -51,6 +51,7 @@ private:
 	void SetContextMenuVisible(bool bContextMenuVisible);
 	void ToggleContextMenu(const FInventoryItemHandle& ItemHandle);
 	void ClearContextMenu();
+	void ItemAbilityCommitted(const FInventoryItemHandle& ItemHandle, float CooldownDuration, float CooldownTimeRemaining);
 	
 	UFUNCTION()
 	void SellFocusedItem();

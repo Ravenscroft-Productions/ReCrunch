@@ -8,6 +8,7 @@
 #include "UObject/Object.h"
 #include "InventoryItem.generated.h"
 
+class UGameplayAbility;
 class UAbilitySystemComponent;
 class UPA_ShopItem;
 
@@ -62,6 +63,8 @@ public:
 	bool ReduceStackCount();
 	// returns true if was able to set
 	bool SetStackCount(int NewStackCount);
+	bool IsGrantingAbility(TSubclassOf<UGameplayAbility> AbilityClass) const;
+	bool IsGrantingAnyAbility() const;
 	
 private:
 	UPROPERTY()

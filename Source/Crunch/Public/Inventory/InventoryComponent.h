@@ -8,12 +8,14 @@
 #include "InventoryComponent.generated.h"
 
 
+class UGameplayAbility;
 class UPA_ShopItem;
 class UAbilitySystemComponent;
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemAddedDelegate, const UInventoryItem* /*NewItem*/);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnItemRemovedDelegate, const FInventoryItemHandle& /*ItemHandle*/);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnItemStackCountChangedDelegate, const FInventoryItemHandle&, int /*NewCount*/);
+DECLARE_MULTICAST_DELEGATE_ThreeParams(FOnItemAbilityCommitted, const FInventoryItemHandle&, float /*CooldownDuration*/, float /*CooldownTimeRemaining*/);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class CRUNCH_API UInventoryComponent : public UActorComponent
@@ -25,6 +27,7 @@ public:
 	FOnItemAddedDelegate OnItemAdded;
 	FOnItemRemovedDelegate OnItemRemoved;
 	FOnItemStackCountChangedDelegate OnItemStackCountChanged;
+	FOnItemAbilityCommitted OnItemAbilityCommitted;
 	void TryActivateItem(const FInventoryItemHandle& ItemHandle);
 	void TryPurchase(const UPA_ShopItem* ItemToPurchase);
 	void SellItem(const FInventoryItemHandle& ItemHandle);
@@ -50,7 +53,8 @@ private:
 
 	UPROPERTY()
 	TMap<FInventoryItemHandle, UInventoryItem*> InventoryMap;
-		
+	
+	void AbilityCommitted(UGameplayAbility* CommittedAbility);
 /***************************************************************/
 /*                          Server                             */
 /***************************************************************/
