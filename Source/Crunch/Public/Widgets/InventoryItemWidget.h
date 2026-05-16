@@ -58,6 +58,7 @@ private:
 	
 	int SlotNumber;
 	
+	void UpdateCanCastDisplay(bool bCanCast);
 	virtual void RightButtonClicked() override;
 	virtual void LeftButtonClicked() override;
 	/***********************************************/

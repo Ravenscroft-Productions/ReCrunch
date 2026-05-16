@@ -42,6 +42,34 @@ void UInventoryItemWidget::UpdateInventoryItem(const UInventoryItem* Item)
 	{
 		StackCountText->SetVisibility(ESlateVisibility::Hidden);
 	}
+	
+	ClearCooldown();
+	
+	if (InventoryItem->IsGrantingAnyAbility())
+	{
+		UpdateCanCastDisplay(InventoryItem->CanCastAbility());
+		float AbilityCooldownRemaining = InventoryItem->GetAbilityCooldownTimeRemaining();
+		float AbilityCooldownDuration = InventoryItem->GetAbilityCooldownDuration();
+		
+		if (AbilityCooldownRemaining > 0.0f)
+		{
+			StartCooldown(AbilityCooldownDuration, AbilityCooldownRemaining);
+		}
+		
+		float AbilityCost = InventoryItem->GetAbilityManaCost();
+		ManaCostText->SetVisibility(AbilityCost == 0.0f ? ESlateVisibility::Hidden : ESlateVisibility::Visible);
+		ManaCostText->SetText(FText::AsNumber(AbilityCost));
+		
+		CooldownDurationText->SetVisibility(AbilityCooldownDuration == 0.0f ? ESlateVisibility::Hidden : ESlateVisibility::Visible);
+		CooldownDurationText->SetText(FText::AsNumber(AbilityCooldownDuration));
+	}
+	else
+	{
+		UpdateCanCastDisplay(true);
+		ManaCostText->SetVisibility(ESlateVisibility::Hidden);
+		CooldownDurationText->SetVisibility(ESlateVisibility::Hidden);
+		CooldownCountText->SetVisibility(ESlateVisibility::Hidden);
+	}
 }
 
 bool UInventoryItemWidget::IsEmpty() const
@@ -56,6 +84,7 @@ void UInventoryItemWidget::SetSlotNumber(int NewSlotNumber)
 
 void UInventoryItemWidget::EmptySlot()
 {
+	ClearCooldown();
 	InventoryItem = nullptr;
 	SetIcon(EmptyTexture);
 	SetTooltipWidget(nullptr);
@@ -92,6 +121,11 @@ FInventoryItemHandle UInventoryItemWidget::GetItemHandle() const
 	}
 	
 	return FInventoryItemHandle::InvalidHandle();
+}
+
+void UInventoryItemWidget::UpdateCanCastDisplay(bool bCanCast)
+{
+	GetItemIcon()->GetDynamicMaterial()->SetScalarParameterValue(CanCastDynamicMaterialParamName, bCanCast ? 1.0f : 0.0f);
 }
 
 void UInventoryItemWidget::RightButtonClicked()
