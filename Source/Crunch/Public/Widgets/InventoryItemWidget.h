@@ -90,6 +90,8 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Cooldown")
 	FName CanCastDynamicMaterialParamName = "CanCast";
 	
+	void BindCanCastAbilityDelegate();
+	void UnbindCanCastAbilityDelegate();
 	void CooldownFinished();
 	void UpdateCooldown();
 	void ClearCooldown();

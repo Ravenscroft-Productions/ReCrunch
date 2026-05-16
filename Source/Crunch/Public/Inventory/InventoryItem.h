@@ -6,11 +6,14 @@
 #include "ActiveGameplayEffectHandle.h"
 #include "GameplayAbilitySpecHandle.h"
 #include "UObject/Object.h"
+#include "GameplayEffectTypes.h"
 #include "InventoryItem.generated.h"
 
 class UGameplayAbility;
 class UAbilitySystemComponent;
 class UPA_ShopItem;
+
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnAbilityCanCastUpdatedDelegate, bool /*bCanCast*/)
 
 USTRUCT()
 struct FInventoryItemHandle
@@ -44,6 +47,8 @@ class CRUNCH_API UInventoryItem : public UObject
 {
 	GENERATED_BODY()
 public:
+	FOnAbilityCanCastUpdatedDelegate OnAbilityCanCastUpdated;
+	
 	UInventoryItem();
 	bool IsValid() const;
 	void InitItem(const FInventoryItemHandle& NewHandle, const UPA_ShopItem* NewShopItem, UAbilitySystemComponent* AbilitySystemComponent);
@@ -68,9 +73,12 @@ public:
 	float GetAbilityCooldownDuration() const;
 	float GetAbilityManaCost() const;
 	bool CanCastAbility() const;
+	FGameplayAbilitySpecHandle GetGrantedAbilitySpecHandle() const { return GrantedAbilitySpecHandle; }
+	void SetGrantedAbilitySpecHandle(FGameplayAbilitySpecHandle SpecHandle) { GrantedAbilitySpecHandle = SpecHandle; }
 	
 private:
 	void ApplyGASModifications();
+	void ManaUpdated(const FOnAttributeChangeData& ChangeData);
 	
 	UPROPERTY()
 	const UPA_ShopItem* ShopItem;
