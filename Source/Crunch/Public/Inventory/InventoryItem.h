@@ -59,6 +59,7 @@ public:
 	void RemoveGASModifications();
 	FORCEINLINE int GetStackCount() const { return StackCount; }
 	void SetSlot(int NewSlot);
+	int GetSlot() const { return Slot; }
 	bool IsStackFull() const;
 	bool IsForItem(const UPA_ShopItem* Item) const;
 	// returns true if was able to add
