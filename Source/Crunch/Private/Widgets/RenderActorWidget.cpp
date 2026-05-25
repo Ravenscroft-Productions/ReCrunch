@@ -34,7 +34,7 @@ void URenderActorWidget::BeginDestroy()
 
 void URenderActorWidget::BeginRenderCapture()
 {
-	RenderTickInterval = 1.0f/(float)FrameRate;
+	RenderTickInterval = 1.0f / (float)FrameRate;
 	UWorld* World = GetWorld();
 	if (World)
 	{
@@ -63,13 +63,13 @@ void URenderActorWidget::ConfigureRenderActor()
 {
 	if (!GetRenderActor())
 	{
-		UE_LOG(LogTemp,Warning, TEXT("No Render Actor, Nothing will be rendered"));
+		UE_LOG(LogTemp, Warning, TEXT("No Render Actor, Nothing will be rendered"));
 		return;
 	}
 	
 	RenderTarget = NewObject<UTextureRenderTarget2D>(this);
-	RenderTarget->InitAutoFormat((int)RenderSize.X, (int)RenderSize.Y);
-	RenderTarget->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8_SRGB;
+	RenderTarget->InitAutoFormat(RenderSize.X, RenderSize.Y);
+	RenderTarget->RenderTargetFormat = ETextureRenderTargetFormat::RTF_RGBA8;
 	GetRenderActor()->SetRenderTarget(RenderTarget);
 	
 	UMaterialInstanceDynamic* DisplayImageDynamicMaterial = DisplayImage->GetDynamicMaterial();

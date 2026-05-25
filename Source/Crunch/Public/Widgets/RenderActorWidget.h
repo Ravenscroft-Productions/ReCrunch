@@ -23,7 +23,7 @@ protected:
 	
 private:
 	virtual void SpawnRenderActor() PURE_VIRTUAL(URenderActorWidget::SpawnRenderActor, );
-	virtual ARenderActor* GetRenderActor() const PURE_VIRTUAL(URenderActorWidget::GetRenderActor, return nullptr;);
+	virtual ARenderActor* GetRenderActor() const PURE_VIRTUAL(URenderActorWidget::GetRenderActor, return nullptr; );
 	void BeginRenderCapture();
 	void UpdateRender();
 	void StopRenderCapture();
