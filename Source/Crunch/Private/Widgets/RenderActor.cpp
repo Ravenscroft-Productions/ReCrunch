@@ -36,5 +36,5 @@ void ARenderActor::BeginPlay()
 {
 	Super::BeginPlay();
 	CaptureComponent->ShowOnlyActorComponents(this);
-	SetActorLocation(FVector(0.0f, 100000.0f, 0.0f));
+	SetActorLocation(FVector(0.0f, 0.0f, 100000.0f));
 }

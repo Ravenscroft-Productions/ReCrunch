@@ -7,6 +7,7 @@
 #include "GAS/CGameplayAbilityTypes.h"
 #include "GameplayWidget.generated.h"
 
+class USkeletalMeshRenderWidget;
 class UInventoryWidget;
 class UShopWidget;
 class UStatsGauge;
@@ -55,6 +56,9 @@ private:
 	
 	UPROPERTY(meta = (BindWidget))
 	UInventoryWidget* InventoryWidget;
+	
+	UPROPERTY(meta = (BindWidget))
+	USkeletalMeshRenderWidget* HeadshotWidget;
 	
 	UPROPERTY(Transient, meta = (BindWidgetAnim))
 	UWidgetAnimation* ShopPopUpAnimation;
