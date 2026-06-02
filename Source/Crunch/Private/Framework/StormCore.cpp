@@ -27,7 +27,13 @@ AStormCore::AStormCore()
 
 void AStormCore::BeginPlay()
 {
-	Super::BeginPlay();	
+	Super::BeginPlay();
+	
+	FVector TeamOneGoalLoc = TeamOneGoal->GetActorLocation();
+	FVector TeamTwoGoalLoc = TeamTwoGoal->GetActorLocation();	
+	FVector GoalOffset = TeamOneGoalLoc - TeamTwoGoalLoc;
+	GoalOffset.Z = 0.0f;
+	TravelLength = GoalOffset.Length();
 }
 
 void AStormCore::PossessedBy(AController* NewController)
@@ -194,5 +200,13 @@ void AStormCore::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifeti
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 	
 	DOREPLIFETIME_CONDITION_NOTIFY(AStormCore, CoreToCapture, COND_None, REPNOTIFY_Always);
+}
+
+float AStormCore::GetProgress() const
+{
+	FVector TeamTwoGoalLoc = TeamTwoGoal->GetActorLocation();
+	FVector VectorFromTeamOne = GetActorLocation() - TeamTwoGoalLoc;
+	VectorFromTeamOne.Z = 0.0f;
+	return VectorFromTeamOne.Length() / TravelLength;
 }
 

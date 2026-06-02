@@ -27,6 +27,7 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	virtual void PostEditChangeProperty(FPropertyChangedEvent& PropertyChangedEvent) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+	float GetProgress() const;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -91,4 +92,5 @@ private:
 	int TeamTwoInfluencerCount = 0;
 	float TeamWeight = 0.0f;
 	float CoreCaptureSpeed = 0.0f;
+	float TravelLength = 0.0f;
 };
