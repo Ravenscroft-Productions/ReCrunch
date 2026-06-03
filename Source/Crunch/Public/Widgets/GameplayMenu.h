@@ -18,6 +18,7 @@ class CRUNCH_API UGameplayMenu : public UUserWidget
 public:
 	virtual void NativeConstruct() override;
 	FOnButtonClickedEvent& GetResumeButtonClickedEventDelegate();
+	void SetTitleText(const FString& NewTitle);
 	
 private:
 	UPROPERTY(meta = (BindWidget))
