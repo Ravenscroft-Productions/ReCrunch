@@ -28,6 +28,11 @@ FGameplayTag UCAbilitySystemStatics::GetBasicAttackInputPressedTag()
 	return FGameplayTag::RequestGameplayTag("Ability.BasicAttack.Pressed");
 }
 
+FGameplayTag UCAbilitySystemStatics::GetBasicAttackInputReleasedTag()
+{
+	return FGameplayTag::RequestGameplayTag("Ability.BasicAttack.Released");
+}
+
 FGameplayTag UCAbilitySystemStatics::GetAimStatusTag()
 {
 	return FGameplayTag::RequestGameplayTag("Status.Aim");
