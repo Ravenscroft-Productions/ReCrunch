@@ -19,6 +19,9 @@ public:
 	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 	
 private:
+	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UAnimMontage* ShootMontage;
+	
 	static FGameplayTag GetShootTag();
 	
 	UFUNCTION()
