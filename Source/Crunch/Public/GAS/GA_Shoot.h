@@ -6,6 +6,7 @@
 #include "CGameplayAbility.h"
 #include "GA_Shoot.generated.h"
 
+class AProjectileActor;
 /**
  * 
  */
@@ -19,7 +20,19 @@ public:
 	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
 	
 private:
-	UPROPERTY(EditDefaultsOnly, Category = "Animation")
+	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
+	TSubclassOf<UGameplayEffect> ProjectileHitEffect;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
+	TSubclassOf<AProjectileActor> ProjectileClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
+	float ShootProjectileSpeed = 2000.0f;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
+	float ShootProjectileRange = 3000.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	UAnimMontage* ShootMontage;
 	
 	static FGameplayTag GetShootTag();
