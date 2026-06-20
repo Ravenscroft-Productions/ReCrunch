@@ -38,6 +38,11 @@ FGameplayTag UCAbilitySystemStatics::GetAimStatusTag()
 	return FGameplayTag::RequestGameplayTag("Status.Aim");
 }
 
+FGameplayTag UCAbilitySystemStatics::GetCrosshairTag()
+{
+	return FGameplayTag::RequestGameplayTag("Status.Crosshair");
+}
+
 FGameplayTag UCAbilitySystemStatics::GetCameraShakeGameplayCueTag()
 {
 	return FGameplayTag::RequestGameplayTag("GameplayCue.CameraShake");
