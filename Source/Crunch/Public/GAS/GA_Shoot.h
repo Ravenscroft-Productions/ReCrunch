@@ -18,6 +18,7 @@ public:
 	UGA_Shoot();
 	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
 	virtual void InputReleased(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo) override;
+	virtual void EndAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, bool bReplicateEndAbility, bool bWasCancelled) override;
 	
 private:
 	UPROPERTY(EditDefaultsOnly, Category = "Shoot")
@@ -35,8 +36,25 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	UAnimMontage* ShootMontage;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Target")
+	float AimTargetCheckTimeInterval = 0.1f;
+	
+	UPROPERTY()
+	AActor* AimTarget;
+	
+	UPROPERTY()
+	UAbilitySystemComponent* AimTargetAbilitySystemComponent;
+		
+	FTimerHandle AimTargetCheckTimerHandle;
+	
 	static FGameplayTag GetShootTag();
 	AActor* GetAimTargetIfValid() const;
+	void FindAimTarget();
+	void StartAimTargetCheckTimer();
+	void StopAimTargetCheckTimer();
+	bool HasValidTarget() const;
+	bool IsTargetInRange() const;
+	void TargetDeadTagUpdated(const FGameplayTag Tag, int32 NewCount);
 	
 	UFUNCTION()
 	void StartShooting(FGameplayEventData Payload);
