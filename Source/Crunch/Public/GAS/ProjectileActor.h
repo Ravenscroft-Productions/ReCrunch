@@ -18,9 +18,9 @@ public:
 	void ShootProjectile(float InSpeed, float InMaxDistance, const AActor* InTarget, FGenericTeamId InTeamId, FGameplayEffectSpecHandle InHitEffectHandle);
 	virtual void Tick(float DeltaTime) override;
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-	void TravelMaxDistanceReached();
 	virtual void SetGenericTeamId(const FGenericTeamId& NewTeamID) override;
 	virtual FGenericTeamId GetGenericTeamId() const override { return TeamId; }
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 	
 protected:
 	virtual void BeginPlay() override;
@@ -38,6 +38,11 @@ private:
 	UPROPERTY()
 	const AActor* Target;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Gameplay Cue")
+	FGameplayTag HitGameplayCueTag;
+	
 	FGameplayEffectSpecHandle HitEffectSpecHandle;
 	FTimerHandle ShootTimerHandle;
+	void TravelMaxDistanceReached();
+	void SendLocalGameplayCue(AActor* CueTargetActor, const FHitResult& HitResult);
 };
