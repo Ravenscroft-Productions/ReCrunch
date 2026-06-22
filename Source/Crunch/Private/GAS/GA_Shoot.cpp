@@ -51,6 +51,12 @@ FGameplayTag UGA_Shoot::GetShootTag()
 	return FGameplayTag::RequestGameplayTag("Ability.Shoot");
 }
 
+AActor* UGA_Shoot::GetAimTargetIfValid() const
+{
+	AActor* AimTarget = GetAimTarget(ShootProjectileRange, ETeamAttitude::Hostile);
+	return AimTarget;
+}
+
 void UGA_Shoot::StartShooting(FGameplayEventData Payload)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Start Shooting"));
@@ -100,7 +106,7 @@ void UGA_Shoot::ShootProjectile(FGameplayEventData Payload)
 		AProjectileActor* Projectile = GetWorld()->SpawnActor<AProjectileActor>(ProjectileClass, SocketLocation, OwnerAvatarActor->GetActorRotation(), SpawnParams);
 		if (Projectile)
 		{
-			Projectile->ShootProjectile(ShootProjectileSpeed, ShootProjectileRange, nullptr, GetOwnerTeamId(), MakeOutgoingGameplayEffectSpec(ProjectileHitEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo)));
+			Projectile->ShootProjectile(ShootProjectileSpeed, ShootProjectileRange, GetAimTargetIfValid(), GetOwnerTeamId(), MakeOutgoingGameplayEffectSpec(ProjectileHitEffect, GetAbilityLevel(CurrentSpecHandle, CurrentActorInfo)));
 		}
 	}
 }

@@ -36,6 +36,7 @@ private:
 	UAnimMontage* ShootMontage;
 	
 	static FGameplayTag GetShootTag();
+	AActor* GetAimTargetIfValid() const;
 	
 	UFUNCTION()
 	void StartShooting(FGameplayEventData Payload);
@@ -44,5 +45,5 @@ private:
 	void StopShooting(FGameplayEventData Payload);
 	
 	UFUNCTION()
-	void ShootProjectile(FGameplayEventData Payload);
+	void ShootProjectile(FGameplayEventData Payload);	
 };
