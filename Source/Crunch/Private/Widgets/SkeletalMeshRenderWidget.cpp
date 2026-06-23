@@ -3,7 +3,9 @@
 
 #include "Widgets/SkeletalMeshRenderWidget.h"
 
+#include "Components/SceneCaptureComponent2D.h"
 #include "GameFramework/Character.h"
+#include "Widgets/RenderActorTargetInterface.h"
 #include "Widgets/SkeletalMeshRenderActor.h"
 
 void USkeletalMeshRenderWidget::NativeConstruct()
@@ -11,9 +13,16 @@ void USkeletalMeshRenderWidget::NativeConstruct()
 	Super::NativeConstruct();
 	
 	ACharacter* PlayerCharacter = GetOwningPlayerPawn<ACharacter>();
+	IRenderActorTargetInterface* PlayerCharacterRenderTargetInterface = Cast<IRenderActorTargetInterface>(PlayerCharacter);
 	if (PlayerCharacter && SkeletalMeshRenderActor)
 	{
 		SkeletalMeshRenderActor->ConfigureSkeletalMesh(PlayerCharacter->GetMesh()->GetSkeletalMeshAsset(), PlayerCharacter->GetMesh()->GetAnimClass());
+		USceneCaptureComponent2D* SceneCapture = SkeletalMeshRenderActor->GetCaptureComponent();
+		if (PlayerCharacterRenderTargetInterface && SceneCapture)
+		{
+			SceneCapture->SetRelativeLocation(PlayerCharacterRenderTargetInterface->GetCaptureLocalPosition());
+			SceneCapture->SetRelativeRotation(PlayerCharacterRenderTargetInterface->GetCaptureLocalRotation());
+		}
 	}
 }
 

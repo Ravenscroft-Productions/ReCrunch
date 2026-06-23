@@ -15,6 +15,7 @@ public:
 	ARenderActor();
 	void SetRenderTarget(UTextureRenderTarget2D* RenderTarget);
 	void UpdateRender();
+	FORCEINLINE USceneCaptureComponent2D* GetCaptureComponent() const { return CaptureComponent; }
 
 protected:
 	virtual void BeginPlay() override;
