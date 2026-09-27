@@ -6,6 +6,7 @@
 #include "CGameplayAbility.h"
 #include "GA_Lazer.generated.h"
 
+class ATargetActor_Line;
 /**
  * 
  */
@@ -27,7 +28,17 @@ private:
 	UPROPERTY(EditDefaultsOnly, Category = "Anim")
 	UAnimMontage* LazerMontage;
 	
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	TSubclassOf<ATargetActor_Line> LazerTargetActorClass;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Targeting")
+	FName TargetActorAttachSocketName = "Lazer";
+	
 	UFUNCTION()
 	void ShootLazer(FGameplayEventData Payload);
+	
+	UFUNCTION()
+	void TargetReceived(const FGameplayAbilityTargetDataHandle& TargetDataHandle);
+	
 	void ManaUpdated(const FOnAttributeChangeData& ChangeData);
 };
