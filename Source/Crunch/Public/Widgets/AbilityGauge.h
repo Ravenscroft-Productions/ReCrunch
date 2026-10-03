@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayAbilitySpecHandle.h"
 #include "Blueprint/UserWidget.h"
 #include "Blueprint/IUserObjectListEntry.h"
 #include "GameplayEffectTypes.h"
@@ -98,6 +99,6 @@ private:
 	FNumberFormattingOptions WholeNumberFormattingOptions;
 	FNumberFormattingOptions TwoDigitNumberFormattingOptions;
 	const UAbilitySystemComponent* OwnerAbilitySystemComponent;
-	const FGameplayAbilitySpec* CachedAbilitySpec;
+	FGameplayAbilitySpecHandle CachedAbilitySpecHandle;
 	bool bIsAbilityLearned = false;
 };
